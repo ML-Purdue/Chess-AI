@@ -1,4 +1,4 @@
-package com.nullprogram.chess.you;
+package com.nullprogram.chess.purdue_unstable_ai;
 
 import com.nullprogram.chess.Move;
 
@@ -20,5 +20,9 @@ public class MoveScore {
 
     public Move getMove() {
         return move;
+    }
+
+    public MoveScore getReversedMoveScore() {
+        return new MoveScore(-score, move);
     }
 }

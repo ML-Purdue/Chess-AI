@@ -1,4 +1,4 @@
-package com.nullprogram.chess.you;
+package com.nullprogram.chess.purdue_unstable_ai;
 
 import com.nullprogram.chess.Board;
 import com.nullprogram.chess.Piece;

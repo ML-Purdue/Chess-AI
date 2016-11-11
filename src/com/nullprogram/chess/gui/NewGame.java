@@ -17,8 +17,8 @@ import com.nullprogram.chess.Player;
 import com.nullprogram.chess.ai.Minimax;
 import com.nullprogram.chess.boards.Gothic;
 import com.nullprogram.chess.boards.StandardBoard;
-import com.nullprogram.chess.you.AlphaBetaPruningAI;
-import com.nullprogram.chess.you.MiniMaxAI;
+import com.nullprogram.chess.purdue_legacy_ai.AlphaBetaPruningAI;
+import com.nullprogram.chess.purdue_legacy_ai.MiniMaxAI;
 
 /**
  * Presents the "New Game" dialog to let the user set up a game.

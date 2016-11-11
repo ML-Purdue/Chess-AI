@@ -22,8 +22,8 @@ public class PlayerSelector extends JPanel {
 
     /** JList labels for the user. */
     private static final String[] LABELS_AI = {
-        "You (Mini-max)",
-        "You (Alpha-Beta-Pruning)",
+        "00: NegaMax (Nov 11)",
+        "01: Alpha-Beta Pruning (Nov 11)",
         "Fool (2 plies)",
         "Very Easy (3 plies)",
         "Easy (4 plies)",
