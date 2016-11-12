@@ -32,7 +32,7 @@ public class Evaluation {
                 }
             }
         }
-        int runningPoints = myPoints - enemyPoints;
+        double runningPoints = myPoints - enemyPoints;
 
         if (runningPoints < 0 && (board.stalemate() || board.threeFold())) {
             runningPoints += 1;
@@ -43,7 +43,73 @@ public class Evaluation {
         if (board.checkmate(side)) {
             runningPoints -= 1000;
         }
+        if (board.checkmate(Piece.opposite(side))) {
+            runningPoints += 500;
+        }
+
+        if (board.check(side)) {
+            runningPoints -= 10;
+        }
+        if (board.check(Piece.opposite(side))) {
+            runningPoints += 5;
+        }
+
+        // Ideas
+        // Distance of opponents pieces to king
+        //  Distance of your pieces to their king
+        // Center control
+        // How far away king is from higher value pieces
+        // Stacked rooks
+        //    That other version
+
+
+        // Staggered pawns
+        double pawnPoints = 0;
+        for (int i = 0; i < board.getWidth(); i++) {
+            for (int j = 0; j < board.getHeight(); j++) {
+                Piece p = board.getPiece(new Position(i, j));
+                if (p != null && p.getClass().equals(Pawn.class)) {
+                    if (p.getSide().equals(side)) {
+                        pawnPoints += topLeft(p, board);
+                        pawnPoints += topRight(p, board);
+                    } else {
+                        pawnPoints -= topLeft(p, board);
+                        pawnPoints -= topRight(p, board);
+                    }
+                }
+            }
+        }
+
+
+        pawnPoints *= .25;
+        runningPoints += pawnPoints;
+
         return runningPoints;
+    }
+
+    private static int topRight(Piece p, Board board){
+        int x = p.getPosition().getX();
+        int y = p.getPosition().getY();
+        if(x+1 < board.getWidth() && y+1 < board.getHeight()){
+            Piece next = board.getPiece(new Position(x+1,y+1));
+            if (next!=null && next.getSide().equals(p.getSide()) && !next.getClass().equals(King.class)){
+                return getPieceValue(next);
+            }
+        }
+        return 0;
+    }
+
+
+    private static int topLeft(Piece p, Board board){
+        int x = p.getPosition().getX();
+        int y = p.getPosition().getY();
+        if(x-1 >= 0 && y+1 < board.getHeight()){
+            Piece next = board.getPiece(new Position(x-1,y+1));
+            if (next!=null && next.getSide().equals(p.getSide())&& !next.getClass().equals(King.class)){
+                return getPieceValue(next);
+            }
+        }
+        return 0;
     }
 
     private static int getPieceValue(Piece p) {
