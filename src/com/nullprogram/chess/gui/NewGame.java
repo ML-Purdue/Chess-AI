@@ -105,6 +105,7 @@ public class NewGame extends JDialog implements ActionListener {
 	 * @return player of named type
 	 */
 	private Player createPlayer(final Game game, final String name) {
+		System.out.println(name);
 		if ("human".equals(name)) {
 			return parent.getPlayer();
 		} else if ("p-mm".equals(name)) {

@@ -14,7 +14,9 @@ public class AlphaBetaPruningAI implements Player {
 
     @Override
     public Move takeTurn(Board board, Piece.Side side) {
+        long timeStart = System.currentTimeMillis();
         Move m = predictBestMove(0, 5, board, side, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY).getMove();
+        System.out.println(System.currentTimeMillis() - timeStart);
         if (m == null)
             throw new NullPointerException("null move returned");
         else

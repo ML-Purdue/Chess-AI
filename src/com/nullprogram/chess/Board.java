@@ -437,4 +437,8 @@ public abstract class Board implements Serializable {
 		// 100 since a move is both players moving
 		return (movesSince > 100);
 	}
+
+    public MoveList getMoves() {
+        return moves;
+    }
 }
