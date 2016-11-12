@@ -4,6 +4,9 @@ package com.nullprogram.chess.purdue_unstable_ai;
  * Created by matthewpage on 11/12/16.
  */
 import com.nullprogram.chess.*;
+import com.nullprogram.chess.pieces.*;
+
+import java.util.HashMap;
 
 public class Transposition {
     Board board;
@@ -23,11 +26,23 @@ public class Transposition {
     @Override
     public int hashCode() {
         int hash = 0;
-        for (Move move : board.getMoves().getLast5Moves()) {
-            hash += move.getOrigin().getX()*8 + move.getOrigin().getY();
-            hash *= 67;
-            hash += move.getDest().getX()*8 + move.getDest().getY();
-            hash *= 67;
+        for (int i = 0; i < board.getWidth(); i++) {
+            for (int j = 0; j < board.getHeight(); j++) {
+                Piece p = board.getPiece(new Position(i, j));
+                if (p instanceof Bishop)
+                    hash += 1;
+                else if (p instanceof Rook)
+                    hash += 2;
+                else if (p instanceof Knight)
+                    hash += 3;
+                else if (p instanceof Pawn)
+                    hash += 4;
+                else if (p instanceof King)
+                    hash += 5;
+                else if (p instanceof Queen)
+                    hash += 6;
+                hash *= 7;
+            }
         }
         return hash;
     }
