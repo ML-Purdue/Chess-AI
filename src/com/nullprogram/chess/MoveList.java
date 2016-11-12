@@ -220,4 +220,14 @@ public class MoveList implements Iterable<Move>, Serializable {
     public final Iterator<Move> iterator() {
         return moves.iterator();
     }
+
+    public List<Move> getLast5Moves() {
+        int start = Math.max(moves.size(), 0);
+        int end = moves.size();
+        return moves.subList(start, end);
+    }
+
+    public List<Move> getMoves() {
+        return moves;
+    }
 }

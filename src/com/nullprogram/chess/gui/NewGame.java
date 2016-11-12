@@ -105,11 +105,12 @@ public class NewGame extends JDialog implements ActionListener {
 	 * @return player of named type
 	 */
 	private Player createPlayer(final Game game, final String name) {
+		System.out.println(name);
 		if ("human".equals(name)) {
 			return parent.getPlayer();
-		} else if ("you-mm".equals(name)) {
+		} else if ("p-mm".equals(name)) {
 			return new MiniMaxAI(game);
-		} else if ("you-abp".equals(name)) {
+		} else if ("p-abp".equals(name)) {
 			return new AlphaBetaPruningAI(game);
 		} else if ("p-tt".equals(name)){
 			return new com.nullprogram.chess.purdue_unstable_ai.AlphaBetaPruningAI(game);
