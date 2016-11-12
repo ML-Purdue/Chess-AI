@@ -14,7 +14,11 @@ public class AlphaBetaPruningAI implements Player {
 
     @Override
     public Move takeTurn(Board board, Piece.Side side) {
-        return predictBestMove(0, 5, board, side, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY).getMove();
+        Move m = predictBestMove(0, 5, board, side, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY).getMove();
+        if (m == null)
+            throw new NullPointerException("null move returned");
+        else
+            return m;
     }
 
     public MoveScore predictBestMove(int ply, int finalPly, Board board, Piece.Side side, double beta, double alpha) {
@@ -22,7 +26,7 @@ public class AlphaBetaPruningAI implements Player {
             return new MoveScore(Evaluation.evaluateBoard(board, side), null).getReversedMoveScore();
         } else {
             MoveScore bestMove = new MoveScore(Double.NEGATIVE_INFINITY, null);
-            for (Move move : board.allMoves(side, true)) {
+            for (Move move : board.allMoves(side, false)) {
                 board.move(move);
                 Piece.Side opponent = (side == BLACK ? WHITE : BLACK);
                 MoveScore newMoveScore = predictBestMove(ply + 1, finalPly, board, opponent, -alpha, -beta);
