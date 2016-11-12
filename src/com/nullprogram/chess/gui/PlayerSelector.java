@@ -24,6 +24,7 @@ public class PlayerSelector extends JPanel {
     private static final String[] LABELS_AI = {
         "00: NegaMax (Nov 11)",
         "01: Alpha-Beta Pruning (Nov 11)",
+        "02: Transposition Tables (dev)",
         "Fool (2 plies)",
         "Very Easy (3 plies)",
         "Easy (4 plies)",
@@ -35,7 +36,7 @@ public class PlayerSelector extends JPanel {
 
     /** Configuration names corresponding to LABELS_AI. */
     private static final String[] NAMES_AI = {
-        "you-mm", "you-abp", "depth2", "depth3", "depth4", "depth5", "depth6", "depth7", "depth8",
+        "p-mm", "p-abp", "p-tt", "depth2", "depth3", "depth4", "depth5", "depth6", "depth7", "depth8",
     };
 
     /** Selection for a human player. */

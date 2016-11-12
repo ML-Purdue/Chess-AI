@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="497aae3d-00ce-4729-9dab-ccda62cd8bb8" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/nullprogram/chess/purdue_legacy_ai/AlphaBetaPruningAI.java" afterPath="$PROJECT_DIR$/src/com/nullprogram/chess/purdue_legacy_ai/AlphaBetaPruningAI.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/nullprogram/chess/purdue_unstable_ai/AlphaBetaPruningAI.java" afterPath="$PROJECT_DIR$/src/com/nullprogram/chess/purdue_unstable_ai/AlphaBetaPruningAI.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/nullprogram/chess/gui/NewGame.java" afterPath="$PROJECT_DIR$/src/com/nullprogram/chess/gui/NewGame.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/nullprogram/chess/gui/PlayerSelector.java" afterPath="$PROJECT_DIR$/src/com/nullprogram/chess/gui/PlayerSelector.java" />
     </list>
     <ignored path="PurdueSigaiChessAi.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -42,13 +42,23 @@
       <file leaf-file-name="AlphaBetaPruningAI.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/purdue_legacy_ai/AlphaBetaPruningAI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="24" column="30" selection-start-line="0" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+            <state relative-caret-position="105">
+              <caret line="7" column="27" selection-start-line="7" selection-start-column="27" selection-end-line="7" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#308#309#0" expanded="true" />
                 <element signature="e#340#341#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="NewGame.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/gui/NewGame.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="217">
+              <caret line="117" column="9" selection-start-line="117" selection-start-column="9" selection-end-line="117" selection-end-column="9" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -76,23 +86,9 @@
       <file leaf-file-name="Evaluation.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/purdue_unstable_ai/Evaluation.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="60">
+              <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AlphaBetaPruningAI.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/purdue_unstable_ai/AlphaBetaPruningAI.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="607">
-              <caret line="47" column="1" selection-start-line="47" selection-start-column="1" selection-end-line="47" selection-end-column="1" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#310#311#0" expanded="true" />
-                <element signature="e#342#343#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -120,21 +116,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Evaluation.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/purdue_legacy_ai/Evaluation.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="14" column="7" selection-start-line="14" selection-start-column="7" selection-end-line="14" selection-end-column="7" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="PlayerSelector.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/gui/PlayerSelector.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="25" column="40" selection-start-line="25" selection-start-column="40" selection-end-line="25" selection-end-column="40" />
+            <state relative-caret-position="420">
+              <caret line="38" column="25" selection-start-line="38" selection-start-column="25" selection-end-line="38" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -167,10 +153,8 @@
       <list>
         <option value="$PROJECT_DIR$/src/src/com/nullprogram/chess/ai/Config.java" />
         <option value="$PROJECT_DIR$/src/com/nullprogram/chess/Chess.java" />
-        <option value="$PROJECT_DIR$/src/com/nullprogram/chess/gui/NewGame.java" />
         <option value="$PROJECT_DIR$/src/com/nullprogram/chess/you/Utils.java" />
         <option value="$PROJECT_DIR$/src/com/nullprogram/chess/you/Evaluation.java" />
-        <option value="$PROJECT_DIR$/src/com/nullprogram/chess/gui/PlayerSelector.java" />
         <option value="$PROJECT_DIR$/src/com/nullprogram/chess/you/MoveScore.java" />
         <option value="$PROJECT_DIR$/src/com/nullprogram/chess/you/MiniMaxAI.java" />
         <option value="$PROJECT_DIR$/src/com/nullprogram/chess/you/AlphaBetaPruningAI.java" />
@@ -180,6 +164,8 @@
         <option value="$PROJECT_DIR$/src/com/nullprogram/chess/purdue_unstable_ai/MiniMaxAI.java" />
         <option value="$PROJECT_DIR$/src/com/nullprogram/chess/purdue_legacy_ai/AlphaBetaPruningAI.java" />
         <option value="$PROJECT_DIR$/src/com/nullprogram/chess/purdue_unstable_ai/AlphaBetaPruningAI.java" />
+        <option value="$PROJECT_DIR$/src/com/nullprogram/chess/gui/PlayerSelector.java" />
+        <option value="$PROJECT_DIR$/src/com/nullprogram/chess/gui/NewGame.java" />
       </list>
     </option>
   </component>
@@ -866,7 +852,7 @@
       <workItem from="1476985411820" duration="2122000" />
       <workItem from="1477143277220" duration="1360000" />
       <workItem from="1477159429158" duration="555000" />
-      <workItem from="1478895386094" duration="1954000" />
+      <workItem from="1478895386094" duration="2380000" />
     </task>
     <task id="LOCAL-00001" summary="Pseudocode">
       <created>1477144034061</created>
@@ -896,11 +882,18 @@
       <option name="project" value="LOCAL" />
       <updated>1478896182811</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Fixed issues with alpha-beta">
+      <created>1478973609608</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1478973609608</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17067000" />
+    <option name="totallyTimeSpent" value="17493000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1173" extended-state="6" />
@@ -949,7 +942,8 @@
     <MESSAGE value="README" />
     <MESSAGE value="Re-organized code" />
     <MESSAGE value="Created dev" />
-    <option name="LAST_COMMIT_MESSAGE" value="Created dev" />
+    <MESSAGE value="Fixed issues with alpha-beta" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed issues with alpha-beta" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1266,16 +1260,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/loganai/LoganAI.java" />
     <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/puai/PUMiniMax.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/gui/NewGame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="112" column="45" selection-start-line="112" selection-start-column="45" selection-end-line="112" selection-end-column="45" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/Chess.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="480">
@@ -1308,14 +1292,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/gui/PlayerSelector.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="25" column="40" selection-start-line="25" selection-start-column="40" selection-end-line="25" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/purdue_legacy_ai/MoveScore.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
@@ -1327,26 +1303,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/purdue_unstable_ai/Evaluation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/purdue_unstable_ai/MiniMaxAI.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="24" column="54" selection-start-line="24" selection-start-column="54" selection-end-line="24" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/purdue_unstable_ai/MoveScore.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="26" column="5" selection-start-line="26" selection-start-column="5" selection-end-line="26" selection-end-column="5" />
           <folding />
         </state>
       </provider>
@@ -1377,10 +1337,38 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/purdue_unstable_ai/MoveScore.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="26" column="5" selection-start-line="26" selection-start-column="5" selection-end-line="26" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/purdue_unstable_ai/Evaluation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/purdue_unstable_ai/AlphaBetaPruningAI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="337">
+          <caret line="29" column="25" selection-start-line="29" selection-start-column="25" selection-end-line="29" selection-end-column="25" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#310#311#0" expanded="true" />
+            <element signature="e#342#343#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/purdue_legacy_ai/AlphaBetaPruningAI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="30" selection-start-line="0" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+        <state relative-caret-position="105">
+          <caret line="7" column="27" selection-start-line="7" selection-start-column="27" selection-end-line="7" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#308#309#0" expanded="true" />
@@ -1389,15 +1377,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/purdue_unstable_ai/AlphaBetaPruningAI.java">
+    <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/gui/PlayerSelector.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="607">
-          <caret line="47" column="1" selection-start-line="47" selection-start-column="1" selection-end-line="47" selection-end-column="1" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#310#311#0" expanded="true" />
-            <element signature="e#342#343#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="420">
+          <caret line="38" column="25" selection-start-line="38" selection-start-column="25" selection-end-line="38" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/nullprogram/chess/gui/NewGame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="217">
+          <caret line="117" column="9" selection-start-line="117" selection-start-column="9" selection-end-line="117" selection-end-column="9" />
+          <folding />
         </state>
       </provider>
     </entry>
