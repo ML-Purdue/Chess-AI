@@ -1,6 +1,7 @@
 package com.nullprogram.chess.purdue_unstable_ai;
 
 import com.nullprogram.chess.Board;
+import com.nullprogram.chess.Move;
 import com.nullprogram.chess.Piece;
 import com.nullprogram.chess.Position;
 import com.nullprogram.chess.pieces.*;
@@ -33,6 +34,17 @@ public class Evaluation {
             }
         }
         double runningPoints = myPoints - enemyPoints;
+        runningPoints *= 10;
+
+        runningPoints += 0.1 * board.allMoves(side, true).size();
+
+        /*
+        for (Move move : board.allMoves(side, true)) {
+            int x = move.getDest().getX();
+            int y = move.getDest().getY();
+            if ((x == 3 || x == 4) && (y == 3 || y == 4))
+                runningPoints += 0.25;
+        }
 
         if (runningPoints < 0 && (board.stalemate() || board.threeFold())) {
             runningPoints += 1;
@@ -47,12 +59,14 @@ public class Evaluation {
             runningPoints += 500;
         }
 
-        if (board.check(side)) {
-            runningPoints -= 10;
-        }
+        //if (board.check(side)) {
+        //    runningPoints -= .1;
+        //}
+        /*
         if (board.check(Piece.opposite(side))) {
             runningPoints += 5;
         }
+        */
 
         // Ideas
         // Distance of opponents pieces to king
@@ -63,6 +77,7 @@ public class Evaluation {
         //    That other version
 
 
+        /*
         // Staggered pawns
         double pawnPoints = 0;
         for (int i = 0; i < board.getWidth(); i++) {
@@ -81,8 +96,10 @@ public class Evaluation {
         }
 
 
-        pawnPoints *= .25;
+        pawnPoints *= .005;
         runningPoints += pawnPoints;
+        */
+
 
         return runningPoints;
     }

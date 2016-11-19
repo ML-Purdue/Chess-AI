@@ -10,58 +10,78 @@ import static com.nullprogram.chess.Piece.Side.WHITE;
 
 public class AlphaBetaPruningAI implements Player {
     private Game game;
-    private HashMap<Transposition, Transposition> transpositionTable;
-    private int[] counts;
+    //private HashMap<Transposition, Transposition> transpositionTable;
+    //private int[] counts;
 
     public AlphaBetaPruningAI(Game game) {
         this.game = game;
-        transpositionTable = new HashMap<>(Integer.MAX_VALUE / 100);
-        counts = new int[Integer.MAX_VALUE / 100];
+    //    transpositionTable = new HashMap<>(Integer.MAX_VALUE / 100);
+    //    counts = new int[Integer.MAX_VALUE / 100];
     }
 
     @Override
     public Move takeTurn(Board board, Piece.Side side) {
+        /*
         long timeStart = System.currentTimeMillis();
-        transpositionTable = new HashMap<>(Integer.MAX_VALUE / 100);
-        counts = new int[Integer.MAX_VALUE / 100];
-        Move move = predictBestMove(0, 5, board, side, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY).getMove();
-        System.out.println("size: " + transpositionTable.size());
-        int max = 0;
-        for (int i : counts)
-            max = Math.max(i, max);
-        System.out.println("max: " + max);
-        System.out.println(System.currentTimeMillis() - timeStart);
+     //   transpositionTable = new HashMap<>(Integer.MAX_VALUE / 100);
+     //   counts = new int[Integer.MAX_VALUE / 100];
+     */
+        System.out.println("Current moves:\n");
+        System.out.println(board);
+        Move move = predictBestMove(0, 4, board, side, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY).getMove();
+    //    System.out.println("size: " + transpositionTable.size());
+        //int max = 0;
+    //    for (int i : counts)
+    //        max = Math.max(i, max);
+    //    System.out.println("max: " + max);
+    //    System.out.println(System.currentTimeMillis() - timeStart);
         return move;
     }
 
     public MoveScore predictBestMove(int ply, int finalPly, Board board, Piece.Side side, double beta, double alpha) {
+        /*
         Transposition lookup = new Transposition(board, finalPly - ply, new MoveScore(0, null));
         if (transpositionTable.containsKey(lookup)) {
             MoveScore moveScore = transpositionTable.get(lookup).getMoveScore();
+            if (side == Piece.Side.BLACK)
+                moveScore = moveScore.getReversedMoveScore();
             if (board.allMoves(side, false).getMoves().contains((moveScore.getMove()))) {
                 return moveScore;
             } else {
                 System.err.println("Hey, we are returning an invalid move!!!");
             }
         }
+        */
         if (ply == finalPly) {
-            MoveScore r = new MoveScore(Evaluation.evaluateBoard(board, side), null).getReversedMoveScore();
+            double value = Evaluation.evaluateBoard(board, side);
+            MoveScore rToReturn = new MoveScore(value, null).getReversedMoveScore();
+            /*
+            if (side == Piece.Side.BLACK)
+                value *= -1;
+            MoveScore r = new MoveScore(value, null).getReversedMoveScore();
             Transposition transposition = new Transposition(board.copy(), 0, r);
             transpositionTable.put(transposition, transposition);
             int hash = transposition.hashCode() % (Integer.MAX_VALUE / 100);
             if (hash < 0)
                 hash *= -1;
             counts[hash]++;
-            return r;
+            */
+            return rToReturn;
         } else {
             MoveScore bestMove = new MoveScore(Double.NEGATIVE_INFINITY, null);
-            for (Move move : board.allMoves(side, false)) {
+            for (Move move : board.allMoves(side, true)) {
                 board.move(move);
                 Piece.Side opponent = (side == BLACK ? WHITE : BLACK);
-                MoveScore newMoveScore = predictBestMove(ply + 1, finalPly, board, opponent, -alpha, -beta);
+                double score = predictBestMove(ply + 1, finalPly, board, opponent, -alpha, -beta).getScore();
+                MoveScore newMoveScore = new MoveScore(score, move);
+                /*
+                if (side == Piece.Side.BLACK)
+                    score *= -1;
 
-                Transposition transposition = new Transposition(board.copy(), finalPly - ply, newMoveScore);
+                MoveScore newMoveScoreTrasposition = new MoveScore(score, move);
+                Transposition transposition = new Transposition(board.copy(), finalPly - ply, newMoveScoreTrasposition);
                 transpositionTable.put(transposition, transposition);
+                */
 
                 board.undo();
                 alpha = Math.max(alpha, newMoveScore.getScore());

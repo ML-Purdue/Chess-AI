@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 import com.nullprogram.chess.boards.BoardFactory;
+import com.nullprogram.chess.boards.StandardBoard;
 import com.nullprogram.chess.pieces.Archbishop;
 import com.nullprogram.chess.pieces.Bishop;
 import com.nullprogram.chess.pieces.Chancellor;
@@ -360,7 +361,8 @@ public abstract class Board implements Serializable {
     public final int moveCount() {
         return moves.size();
     }
-    
+
+    /*
     @Override
     public String toString() {
     	StringBuilder ret = new StringBuilder();
@@ -397,6 +399,7 @@ public abstract class Board implements Serializable {
         }
     	return ret.toString();
     }
+    */
 
 	public boolean threeFold() {
 		Board testBoard = BoardFactory.create(this.getClass());
@@ -440,5 +443,42 @@ public abstract class Board implements Serializable {
 
     public MoveList getMoves() {
         return moves;
+    }
+
+    @Override
+    public String toString() {
+        String str = "";
+        Board board = new StandardBoard();
+        for (int i = 0; i < moves.size(); i++) {
+            Move move = moves.getMoves().get(i);
+            if (i % 2 == 0) {
+                if (i != 0)
+                    str += '\n';
+                int n = (i / 2) + 1;
+                str += n + ".\t";
+            } else {
+                str += '\t';
+            }
+            Piece p = board.getPiece(move.getOrigin());
+            if (p instanceof Bishop) {
+                str += 'B';
+            } else if (p instanceof King) {
+                str += 'K';
+            } else if (p instanceof Knight) {
+                str += 'N';
+            } else if (p instanceof Queen) {
+                str += 'Q';
+            } else if (p instanceof Rook) {
+                str += 'R';
+            }
+            if (move.getCaptured() != null)
+                str += 'x';
+            char a = (char) (move.getDest().getX() + 'a');
+            char b = (char) (move.getDest().getY() + '1');
+            str += a;
+            str += b;
+            board.move(move);
+        }
+        return str;
     }
 }
