@@ -39,6 +39,13 @@ public class AlphaBetaPruningAI implements Player {
     }
 
     public MoveScore predictBestMove(int ply, int finalPly, Board board, Piece.Side side, double beta, double alpha) {
+        if (board.fiftyMoveRule() || board.stalemate() || board.threeFold()) {
+            return new MoveScore(0, null);
+        } else if (board.checkmate(side)) {
+            return new MoveScore(Double.NEGATIVE_INFINITY, null);
+        } else if (board.checkmate()) {
+            return new MoveScore(Double.POSITIVE_INFINITY, null);
+        }
         /*
         Transposition lookup = new Transposition(board, finalPly - ply, new MoveScore(0, null));
         if (transpositionTable.containsKey(lookup)) {
