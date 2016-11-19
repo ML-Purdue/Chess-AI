@@ -201,4 +201,18 @@ public abstract class Piece implements Serializable {
             return Side.BLACK;
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Piece other = (Piece) o;
+
+        if (other.getSide() != this.getSide()) {
+            return false;
+        }
+
+        return true;
+    }
 }
