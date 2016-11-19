@@ -63,13 +63,11 @@ public class Transposition {
                     return false;
             }
         }
-        if (this.plysIntoFutueEvaluated < transposition.plysIntoFutueEvaluated) {
+        if (this.plysIntoFutueEvaluated > transposition.plysIntoFutueEvaluated) {
             return false;
+        } else {
+            return true;
         }
-        if (this.board.getMoves().size() % 2 != transposition.board.getMoves().size() % 2)
-            return false;
-
-        return true;
     }
 
     @Override
