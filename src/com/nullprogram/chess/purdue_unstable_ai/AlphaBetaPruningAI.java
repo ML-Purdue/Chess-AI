@@ -24,32 +24,34 @@ public class AlphaBetaPruningAI implements Player {
         long timeStart = System.currentTimeMillis();
         transpositionTable = new HashMap<>(Integer.MAX_VALUE / 100);
         counts = new int[Integer.MAX_VALUE / 100];
-        Move move = predictBestMove(0, 5, board, side, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY).getMove();
+        MoveScore move = predictBestMove(0, 5, board, side, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
         System.out.println("size: " + transpositionTable.size());
         int max = 0;
         for (int i : counts)
             max = Math.max(i, max);
         System.out.println("max: " + max);
         System.out.println(System.currentTimeMillis() - timeStart);
-        return move;
+        System.out.println("Score: " + move.getScore());
+        return move.getMove();
     }
 
     public MoveScore predictBestMove(int ply, int finalPly, Board board, Piece.Side side, double beta, double alpha) {
         Transposition lookup = new Transposition(board, finalPly - ply, new MoveScore(0, null));
         if (transpositionTable.containsKey(lookup)) {
-            System.out.println("Contains key");
+//            System.out.println("Contains key");
             MoveScore moveScore = transpositionTable.get(lookup).getMoveScore();
-            if (board.allMoves(side, false).getMoves().contains((moveScore.getMove()))) {
-                MoveScore actual_score = bestMove(ply, finalPly, board, side, alpha, beta);
-                if (actual_score.getMove().equals(moveScore.getMove())) {
-                    System.out.println("Transposition table differed");
-                } else {
-                    System.out.println("Transposition tablle was correct");
-                }
-                return moveScore;
-            } else {
-                System.err.println("Hey, we are returning an invalid move!!!");
-            }
+//            if (board.allMoves(side, false).getMoves().contains((moveScore.getMove()))) {
+//                MoveScore actual_score = bestMove(ply, finalPly, board, side, alpha, beta);
+//                if (actual_score.getMove().equals(moveScore.getMove())) {
+//                    System.out.println("Transposition table differed");
+//                } else {
+//                    System.out.println("Transposition tablle was correct");
+//                }
+//                return moveScore;
+//            } else {
+//                System.err.println("Hey, we are returning an invalid move!!!");
+//            }
+            return moveScore;
         }
         return bestMove(ply, finalPly, board, side, alpha, beta);
     }
@@ -66,7 +68,7 @@ public class AlphaBetaPruningAI implements Player {
             return r;
         } else {
             MoveScore bestMove = new MoveScore(Double.NEGATIVE_INFINITY, null);
-            for (Move move : board.allMoves(side, false)) {
+            for (Move move : board.allMoves(side, true)) {
                 board.move(move);
                 Piece.Side opponent = (side == BLACK ? WHITE : BLACK);
                 MoveScore newMoveScore = predictBestMove(ply + 1, finalPly, board, opponent, -alpha, -beta);
