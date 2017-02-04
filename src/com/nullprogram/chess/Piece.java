@@ -1,6 +1,7 @@
 package com.nullprogram.chess;
 
-import com.nullprogram.chess.pieces.ImageServer;
+import com.nullprogram.chess.pieces.*;
+
 import java.awt.Image;
 import java.io.Serializable;
 
@@ -199,6 +200,28 @@ public abstract class Piece implements Serializable {
             return Side.WHITE;
         } else {
             return Side.BLACK;
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        Piece p = (Piece) o;
+        if (p.getSide() != getSide())
+            return false;
+        if (this instanceof Queen && p instanceof Queen) {
+            return true;
+        } else if (this instanceof King && p instanceof King) {
+            return true;
+        } else if (this instanceof Pawn && p instanceof Pawn) {
+            return true;
+        } else if (this instanceof Rook && p instanceof Rook) {
+            return true;
+        } else if (this instanceof Knight && p instanceof Knight) {
+            return true;
+        } else if (this instanceof Bishop && p instanceof Bishop) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

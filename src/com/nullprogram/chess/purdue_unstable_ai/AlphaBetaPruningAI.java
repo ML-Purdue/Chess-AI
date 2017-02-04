@@ -37,13 +37,24 @@ public class AlphaBetaPruningAI implements Player {
     public MoveScore predictBestMove(int ply, int finalPly, Board board, Piece.Side side, double beta, double alpha) {
         Transposition lookup = new Transposition(board, finalPly - ply, new MoveScore(0, null));
         if (transpositionTable.containsKey(lookup)) {
+            System.out.println("Contains key");
             MoveScore moveScore = transpositionTable.get(lookup).getMoveScore();
             if (board.allMoves(side, false).getMoves().contains((moveScore.getMove()))) {
+                MoveScore actual_score = bestMove(ply, finalPly, board, side, alpha, beta);
+                if (actual_score.getMove().equals(moveScore.getMove())) {
+                    System.out.println("Transposition table differed");
+                } else {
+                    System.out.println("Transposition tablle was correct");
+                }
                 return moveScore;
             } else {
                 System.err.println("Hey, we are returning an invalid move!!!");
             }
         }
+        return bestMove(ply, finalPly, board, side, alpha, beta);
+    }
+
+    private MoveScore bestMove(int ply, int finalPly, Board board, Piece.Side side, double alpha, double beta) {
         if (ply == finalPly) {
             MoveScore r = new MoveScore(Evaluation.evaluateBoard(board, side), null).getReversedMoveScore();
             Transposition transposition = new Transposition(board.copy(), 0, r);
