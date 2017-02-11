@@ -34,18 +34,27 @@ public class Evaluation {
         }
         double runningPoints = myPoints - enemyPoints;
 
+        
+
+        // End of game
         if (runningPoints < 0 && (board.stalemate() || board.threeFold())) {
             runningPoints += 1;
         } else if (runningPoints > 0 && (board.stalemate() || board.threeFold())) {
             runningPoints -= 2;
         }
+        if (board.checkmate(side)) {
+            runningPoints -= 1000000;
+        } else if (board.checkmate()) {
+            runningPoints += 1000000;
+        }
 
+        // Maneuverability
         int man = board.allMoves(side, true).size();
         Piece.Side opp = (side == Piece.Side.BLACK)? Piece.Side.WHITE:Piece.Side.BLACK;
         int oppMan = board.allMoves(opp, true).size();
         runningPoints += ((man - oppMan)*0.05);
 
-        // Staggered pawns
+        // Pawn coverage
         double pawnPoints = 0;
         for (int i = 0; i < board.getWidth(); i++) {
             for (int j = 0; j < board.getHeight(); j++) {
@@ -64,6 +73,7 @@ public class Evaluation {
         pawnPoints *= .05;
         runningPoints += pawnPoints;
 
+        // Isolated pawns
         for (int i = 0; i < board.getWidth(); i++) {
             for (int j = 0; j < board.getHeight(); j++) {
                 Piece p = board.getPiece(new Position(i, j));
@@ -84,9 +94,18 @@ public class Evaluation {
             }
         }
 
-        if (board.checkmate(side)) {
-            runningPoints -= 1000;
+        // Center control
+        for(int i = 3; i <= 4; i++){
+            for(int j = 3; j <= 4; j++){
+                Piece p = board.getPiece(new Position(i, j));
+                if (p != null && p.getSide().equals(side)) {
+                    runningPoints += .1 * getPieceValue(p);
+                }else if(p!=null && !p.getSide().equals(side)){
+                    runningPoints -= .1 * getPieceValue(p);
+                }
+            }
         }
+
         return runningPoints;
     }
 
