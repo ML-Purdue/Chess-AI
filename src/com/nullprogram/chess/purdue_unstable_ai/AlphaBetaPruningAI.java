@@ -24,14 +24,14 @@ public class AlphaBetaPruningAI implements Player {
         long timeStart = System.currentTimeMillis();
         transpositionTable = new HashMap<>(Integer.MAX_VALUE / 100);
         counts = new int[Integer.MAX_VALUE / 100];
-        MoveScore move = predictBestMove(0, 5, board, side, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
+        MoveScore move = predictBestMove(0, 4, board, side, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
         System.out.println("size: " + transpositionTable.size());
         int max = 0;
         for (int i : counts)
             max = Math.max(i, max);
         System.out.println("max: " + max);
         System.out.println(System.currentTimeMillis() - timeStart);
-        System.out.println("Score: " + move.getScore());
+        System.out.println("Score: " + move.getScore()*-1);
         return move.getMove();
     }
 
