@@ -34,7 +34,7 @@ public class Evaluation {
         }
         double runningPoints = myPoints - enemyPoints;
 
-        
+
 
         // End of game
         if (runningPoints < 0 && (board.stalemate() || board.threeFold())) {

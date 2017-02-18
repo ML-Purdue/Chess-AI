@@ -6,16 +6,14 @@ package com.nullprogram.chess.purdue_unstable_ai;
 import com.nullprogram.chess.*;
 import com.nullprogram.chess.pieces.*;
 
-import java.util.HashMap;
-
 public class Transposition {
     Board board;
-    int plysIntoFutueEvaluated;
+    int moveSoFar;
     MoveScore moveScore;
 
-    public Transposition(Board board, int plysIntoFutueEvaluated, MoveScore moveScore) {
+    public Transposition(Board board, int moveSoFar, MoveScore moveScore) {
         this.board = board;
-        this.plysIntoFutueEvaluated = plysIntoFutueEvaluated;
+        this.moveSoFar = moveSoFar;
         this.moveScore = moveScore;
     }
 
@@ -63,17 +61,15 @@ public class Transposition {
                     return false;
             }
         }
-        if (this.plysIntoFutueEvaluated < transposition.plysIntoFutueEvaluated) {
+        if (this.moveSoFar > transposition.moveSoFar) {
             return false;
         }
-        if (this.board.getMoves().size() % 2 != transposition.board.getMoves().size() % 2)
-            return false;
 
         return true;
     }
 
     @Override
     public Object clone() {
-        return new Transposition(board.copy(), plysIntoFutueEvaluated, moveScore);
+        return new Transposition(board.copy(), moveSoFar, moveScore);
     }
 }
