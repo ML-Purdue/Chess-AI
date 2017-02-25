@@ -95,13 +95,14 @@ public class Evaluation {
         }
 
         // Center control
+        // Note: Value more disposable pieces in the center, as apposed to more valuable ones like a Queen
         for(int i = 3; i <= 4; i++){
             for(int j = 3; j <= 4; j++){
                 Piece p = board.getPiece(new Position(i, j));
                 if (p != null && p.getSide().equals(side)) {
-                    runningPoints += .1 * getPieceValue(p);
-                }else if(p!=null && !p.getSide().equals(side)){
-                    runningPoints -= .1 * getPieceValue(p);
+                    runningPoints += .25 / Math.sqrt(getPieceValue(p));
+                }else if(p!=null && !p.getSide().equals(side)) {
+                    runningPoints -= .25 / getPieceValue(p);
                 }
             }
         }

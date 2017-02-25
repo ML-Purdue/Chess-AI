@@ -113,7 +113,7 @@ public class NewGame extends JDialog implements ActionListener {
 		} else if ("p-abp".equals(name)) {
 			return new AlphaBetaPruningAI(game);
 		} else if ("p-tt".equals(name)){
-			return new com.nullprogram.chess.purdue_unstable_ai.AlphaBetaPruningAI(game);
+			return new com.nullprogram.chess.purdue_unstable_ai.AlphaBetaPruningAI();
 		} else {
 			return new Minimax(game, name);
 		}
