@@ -60,7 +60,7 @@ public class AlphaBetaPruningAI implements Player {
                     moveScore = new MoveScore(moveScore.getScore(), move);
                     addNewMovescore(moveScore);
                     move = getNextMoveToConsider();
-                    System.out.println("Evaluated " + (numMoves - moves.size()) + " of " + numMoves + " moves");
+                    System.out.println("Evaluated " + moveScores.size() + " of " + numMoves + " moves");
                 }
             });
             threads[i].start();

@@ -17,8 +17,10 @@ public class Evaluation {
         if (values == null)
             values = setUpValues();
 
-        int myPoints = 0;
-        int enemyPoints = 0;
+        double myPoints = 0;
+        double enemyPoints = 0;
+
+        // TODO: Make different eval function if myPoints and enemyPoints are both below some threshold
 
         for (int i = 0; i < board.getWidth(); i++) {
             for (int j = 0; j < board.getHeight(); j++) {
@@ -32,7 +34,7 @@ public class Evaluation {
                 }
             }
         }
-        double runningPoints = myPoints - enemyPoints;
+        double runningPoints = (myPoints - enemyPoints) * 1;
 
 
 
