@@ -8,20 +8,47 @@ import com.nullprogram.chess.pieces.*;
 import java.util.HashMap;
 
 public class Evaluation {
-    private static HashMap<Class, Integer> values;
+    private HashMap<Class, Double> values;
+
+    private double isolatedPawns;
+    private final int CHECKMATEVAL = 1000000 ;
+    private double staleMateWinning;
+    private double staleMateLosing;
+    private double manCoeff;
+    private double centerCoeff;
+    private double pawnCoeff;
+    private double power;
+    private double[] param;
+
+    public Evaluation(double isolatedPawns, double staleMateL, double staleMateW, double manCoeff, double centerCoeff,
+                      double power, double pawnCoeff, double bishVal, double kingVal,
+                      double knightVal, double pawnVal, double queenVal, double rookVal) {
+
+        values = setUpValues(bishVal, kingVal, knightVal, pawnVal, queenVal, rookVal);
+        this.isolatedPawns = isolatedPawns;
+        staleMateWinning = staleMateW;
+        staleMateLosing = staleMateL;
+        this.centerCoeff = centerCoeff;
+        this.manCoeff = manCoeff;
+        this.power = power;
+        this.pawnCoeff = pawnCoeff;
+        this.param = new double[]{isolatedPawns, staleMateL, staleMateW, manCoeff, centerCoeff,
+        power, pawnCoeff, bishVal, kingVal,
+        knightVal, pawnVal, queenVal, rookVal};
+    }
+
+    public double[] getParam() {
+        return param;
+    }
 
     /**
      * Given a state of the board, evaluate the board with respect to the given side.
      */
-    public static double evaluateBoard(Board board, Piece.Side side) {
-        if (values == null)
-            values = setUpValues();
-
+    double evaluateBoard(Board board, Piece.Side side) {
         double myPoints = 0;
         double enemyPoints = 0;
 
         // TODO: Make different eval function if myPoints and enemyPoints are both below some threshold
-
         for (int i = 0; i < board.getWidth(); i++) {
             for (int j = 0; j < board.getHeight(); j++) {
                 Piece p = board.getPiece(new Position(i, j));
@@ -40,21 +67,21 @@ public class Evaluation {
 
         // End of game
         if (runningPoints < 0 && (board.stalemate() || board.threeFold())) {
-            runningPoints += 1;
+            runningPoints += staleMateWinning;
         } else if (runningPoints > 0 && (board.stalemate() || board.threeFold())) {
-            runningPoints -= 2;
+            runningPoints -= staleMateLosing;
         }
         if (board.checkmate(side)) {
-            runningPoints -= 1000000;
+            runningPoints -= CHECKMATEVAL;
         } else if (board.checkmate()) {
-            runningPoints += 1000000;
+            runningPoints += CHECKMATEVAL;
         }
 
         // Maneuverability
         int man = board.allMoves(side, true).size();
         Piece.Side opp = (side == Piece.Side.BLACK)? Piece.Side.WHITE:Piece.Side.BLACK;
         int oppMan = board.allMoves(opp, true).size();
-        runningPoints += ((man - oppMan)*0.05);
+        runningPoints += ((man - oppMan)*manCoeff);
 
         // Pawn coverage
         double pawnPoints = 0;
@@ -72,7 +99,7 @@ public class Evaluation {
                 }
             }
         }
-        pawnPoints *= .05;
+        pawnPoints *= pawnCoeff;
         runningPoints += pawnPoints;
 
         // Isolated pawns
@@ -83,13 +110,13 @@ public class Evaluation {
                     if (p.getSide() == side) {
                         if (bottomRight(p, board) == 0 && bottomLeft(p, board) == 0 && topLeft(p, board) == 0 &&
                                 topRight(p, board) == 0) {
-                            runningPoints -= 0.5;
+                            runningPoints -= isolatedPawns;
                         }
                     }
                     else {
                         if (bottomRight(p, board) == 0 && bottomLeft(p, board) == 0 && topLeft(p, board) == 0 &&
                                 topRight(p, board) == 0) {
-                            runningPoints += 0.5;
+                            runningPoints += isolatedPawns;
                         }
                     }
                 }
@@ -102,9 +129,9 @@ public class Evaluation {
             for(int j = 3; j <= 4; j++){
                 Piece p = board.getPiece(new Position(i, j));
                 if (p != null && p.getSide().equals(side)) {
-                    runningPoints += .25 / Math.sqrt(getPieceValue(p));
+                    runningPoints += centerCoeff/ Math.pow(getPieceValue(p), power);
                 }else if(p!=null && !p.getSide().equals(side)) {
-                    runningPoints -= .25 / getPieceValue(p);
+                    runningPoints -= centerCoeff / Math.pow(getPieceValue(p), power);
                 }
             }
         }
@@ -113,7 +140,7 @@ public class Evaluation {
     }
 
 
-    private static int bottomRight(Piece p, Board board) {
+    private double bottomRight(Piece p, Board board) {
         int x = p.getPosition().getX();
         int y = p.getPosition().getY();
         if (x + 1 < board.getWidth() && y - 1 >= 0) {
@@ -125,7 +152,7 @@ public class Evaluation {
         return 0;
     }
 
-    private static int bottomLeft(Piece p, Board board) {
+    private double bottomLeft(Piece p, Board board) {
         int x = p.getPosition().getX();
         int y = p.getPosition().getY();
         if (x - 1 >= 0 && y - 1 >= 0) {
@@ -137,7 +164,7 @@ public class Evaluation {
         return 0;
     }
 
-    private static int topRight(Piece p, Board board){
+    private double topRight(Piece p, Board board){
         int x = p.getPosition().getX();
         int y = p.getPosition().getY();
         if(x+1 < board.getWidth() && y+1 < board.getHeight()){
@@ -150,7 +177,7 @@ public class Evaluation {
     }
 
 
-    private static int topLeft(Piece p, Board board){
+    private double topLeft(Piece p, Board board){
         int x = p.getPosition().getX();
         int y = p.getPosition().getY();
         if(x-1 >= 0 && y+1 < board.getHeight()){
@@ -162,20 +189,19 @@ public class Evaluation {
         return 0;
     }
 
-    private static int getPieceValue(Piece p) {
+    private double getPieceValue(Piece p) {
         return values.get(p.getClass());
     }
 
-    private static HashMap<Class, Integer> setUpValues() {
-        HashMap<Class, Integer> values = new HashMap<Class, Integer>();
-        values.put(Archbishop.class, 4);
-        values.put(Bishop.class, 3);
-        values.put(Chancellor.class, 4);
-        values.put(King.class, 1000);
-        values.put(Knight.class, 3);
-        values.put(Pawn.class, 1);
-        values.put(Queen.class, 9);
-        values.put(Rook.class, 5);
+    private  HashMap<Class, Double> setUpValues(double bishVal, double kingVal, double knightVal, double pawnVal,
+                                                 double queenVal, double rookVal) {
+        HashMap<Class, Double> values = new HashMap<>();
+        values.put(Bishop.class, bishVal);
+        values.put(King.class, kingVal);
+        values.put(Knight.class, knightVal);
+        values.put(Pawn.class, pawnVal);
+        values.put(Queen.class, queenVal);
+        values.put(Rook.class, rookVal);
         return values;
     }
 }

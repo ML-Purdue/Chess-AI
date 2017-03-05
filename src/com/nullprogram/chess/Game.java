@@ -101,11 +101,13 @@ public class Game implements Runnable {
     /**
      * Begin the game.
      */
-    public final void begin() {
+    public final Thread begin() {
+        Thread newThread = new Thread(this);
         done = false;
         turn = Piece.Side.BLACK;
         callGameListeners(GameEvent.TURN);
-        new Thread(this).start();
+        newThread.start();
+        return newThread;
     }
 
     @Override
@@ -222,7 +224,7 @@ public class Game implements Runnable {
      * @param message  new status message
      */
     public final void setStatus(final String message) {
-        LOG.info("status: " + message + " Turn: " + turnNumber);
+        //LOG.info("status: " + message + " Turn: " + turnNumber);
         if (message == null) {
             throw new IllegalArgumentException();
         }
@@ -245,7 +247,7 @@ public class Game implements Runnable {
      * @param value  current progress (0.0-1.0)
      */
     public final void setProgress(final float value) {
-        LOG.finest("Game progress: " + value);
+        //LOG.finest("Game progress: " + value);
         progress = value;
         if (value == 0) {
             progressStart = System.currentTimeMillis();

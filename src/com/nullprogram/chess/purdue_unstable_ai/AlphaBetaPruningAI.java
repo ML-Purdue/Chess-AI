@@ -2,7 +2,6 @@ package com.nullprogram.chess.purdue_unstable_ai;
 
 import com.nullprogram.chess.*;
 
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,33 +10,24 @@ import static com.nullprogram.chess.Piece.Side.BLACK;
 import static com.nullprogram.chess.Piece.Side.WHITE;
 
 public class AlphaBetaPruningAI implements Player {
-    private Hashtable<Transposition, Transposition> transpositionTable;
-    List<Move> moves;
-    List<MoveScore> moveScores;
-
     private static final int THRESHOLD = (int) Math.pow(35, 3.5);
     private static final int PLY_THRESHOLD = 4;
     private static final int NUM_THREADS = 8;
     private static final int NUM_BUCKETS = Integer.MAX_VALUE / 100;
 
-    public AlphaBetaPruningAI() {
-        transpositionTable = new Hashtable<>(Integer.MAX_VALUE / 100);
-    }
+    private Evaluation evaluation;
+    private Hashtable<Transposition, Transposition> transpositionTable;
+    private List<Move> moves;
+    private List<MoveScore> moveScores;
 
-    private synchronized Move getNextMoveToConsider() {
-        if (moves.isEmpty()) {
-            return null;
-        } else {
-            return moves.remove(0);
-        }
-    }
-
-    private synchronized void addNewMovescore(MoveScore score) {
-        moveScores.add(score);
+    public AlphaBetaPruningAI(Evaluation evaluation) {
+        this.evaluation = evaluation;
     }
 
     @Override
     public Move takeTurn(Board board, Piece.Side side) {
+
+        // General Setup
         long timeStart = System.currentTimeMillis();
         transpositionTable = new Hashtable<>(NUM_BUCKETS);
 
@@ -60,7 +50,7 @@ public class AlphaBetaPruningAI implements Player {
                     moveScore = new MoveScore(moveScore.getScore(), move);
                     addNewMovescore(moveScore);
                     move = getNextMoveToConsider();
-                    System.out.println("Evaluated " + moveScores.size() + " of " + numMoves + " moves");
+                    //System.out.println("Evaluated " + moveScores.size() + " of " + numMoves + " moves");
                 }
             });
             threads[i].start();
@@ -77,21 +67,21 @@ public class AlphaBetaPruningAI implements Player {
 
         // Determine best move
         MoveScore bestMoveScore = new MoveScore(Double.NEGATIVE_INFINITY, null);
-        System.out.println("Num MoveScores: " + moveScores.size());
+        //System.out.println("Num MoveScores: " + moveScores.size());
         for (MoveScore moveScore : moveScores) {
             if (moveScore.getScore() > bestMoveScore.getScore()) {
                 bestMoveScore = moveScore;
             }
         }
 
-        // Return our move
-        System.out.println("Time: " + (System.currentTimeMillis() - timeStart));
-        System.out.println("Score: " + bestMoveScore.getScore() * -1);
-        System.out.println("From Transposition Table: " + bestMoveScore.isFromTranspositionTable());
+        // Print and return our move
+        //System.out.println("Time: " + (System.currentTimeMillis() - timeStart));
+        //System.out.println("Score: " + bestMoveScore.getScore() * -1);
+        //System.out.println("From Transposition Table: " + bestMoveScore.isFromTranspositionTable());
         return bestMoveScore.getMove();
     }
 
-    public MoveScore transpositionTable(int ply, int finalPly, int numMoves, Board board, Piece.Side side, double beta,
+    private MoveScore transpositionTable(int ply, int finalPly, int numMoves, Board board, Piece.Side side, double beta,
                                         double alpha) {
         Transposition lookup = new Transposition(board, numMoves, new MoveScore(0, null));
         if (transpositionTable.containsKey(lookup)) {
@@ -109,7 +99,7 @@ public class AlphaBetaPruningAI implements Player {
                                        double beta) {
         // Evaluate if we are deep enough
         if (ply >= finalPly && numMoves >= THRESHOLD) {
-            MoveScore r = new MoveScore(Evaluation.evaluateBoard(board, side), null);
+            MoveScore r = new MoveScore(evaluation.evaluateBoard(board, side), null);
             addTranspositionToTable(side, board, numMoves, r);
             return r.getReversedMoveScore();
         } else {
@@ -124,6 +114,8 @@ public class AlphaBetaPruningAI implements Player {
 
                 // Evaluate that move
                 MoveScore newMoveScore = transpositionTable(ply + 1, finalPly, size, board, opponent, -alpha, -beta);
+
+                // Undo the move / add it to the transiposition table
                 addTranspositionToTable(side, board, numMoves, newMoveScore);
                 board.undo();
 
@@ -149,7 +141,6 @@ public class AlphaBetaPruningAI implements Player {
     }
 
     private void addTranspositionToTable(Piece.Side side, Board board, int numMoves, MoveScore moveScore) {
-
         if (side == Piece.Side.WHITE) {
             Transposition transposition = new Transposition(board.copy(), numMoves, moveScore);
             transpositionTable.put(transposition, transposition);
@@ -157,5 +148,17 @@ public class AlphaBetaPruningAI implements Player {
             Transposition transposition = new Transposition(board.copy(), numMoves, moveScore.getReversedMoveScore());
             transpositionTable.put(transposition, transposition);
         }
+    }
+
+    private synchronized Move getNextMoveToConsider() {
+        if (moves.isEmpty()) {
+            return null;
+        } else {
+            return moves.remove(0);
+        }
+    }
+
+    private synchronized void addNewMovescore(MoveScore score) {
+        moveScores.add(score);
     }
 }
