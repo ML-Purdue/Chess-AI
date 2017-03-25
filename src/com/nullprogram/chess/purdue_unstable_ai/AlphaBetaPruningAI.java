@@ -16,7 +16,7 @@ public class AlphaBetaPruningAI implements Player {
     private static final int NUM_BUCKETS = Integer.MAX_VALUE / 100;
 
     private Evaluation evaluation;
-    private Hashtable<Transposition, Transposition> transpositionTable;
+    //private Hashtable<Transposition, Transposition> transpositionTable;
     private List<Move> moves;
     private List<MoveScore> moveScores;
 
@@ -29,7 +29,7 @@ public class AlphaBetaPruningAI implements Player {
 
         // General Setup
         long timeStart = System.currentTimeMillis();
-        transpositionTable = new Hashtable<>(NUM_BUCKETS);
+        //transpositionTable = new Hashtable<>(NUM_BUCKETS);
 
         // Create threads
         Thread[] threads = new Thread[NUM_THREADS - 1];
@@ -76,13 +76,14 @@ public class AlphaBetaPruningAI implements Player {
 
         // Print and return our move
         //System.out.println("Time: " + (System.currentTimeMillis() - timeStart));
-        //System.out.println("Score: " + bestMoveScore.getScore() * -1);
+        System.out.println("Score: " + bestMoveScore.getScore());
         //System.out.println("From Transposition Table: " + bestMoveScore.isFromTranspositionTable());
         return bestMoveScore.getMove();
     }
 
     private MoveScore transpositionTable(int ply, int finalPly, int numMoves, Board board, Piece.Side side, double beta,
                                         double alpha) {
+        /*
         Transposition lookup = new Transposition(board, numMoves, new MoveScore(0, null));
         if (transpositionTable.containsKey(lookup)) {
             MoveScore moveScore = transpositionTable.get(lookup).getMoveScore();
@@ -92,6 +93,7 @@ public class AlphaBetaPruningAI implements Player {
             }
             return moveScore.getReversedMoveScore();
         }
+        */
         return alphaBetaPruning(ply, finalPly, numMoves, board, side, alpha, beta);
     }
 
@@ -141,6 +143,7 @@ public class AlphaBetaPruningAI implements Player {
     }
 
     private void addTranspositionToTable(Piece.Side side, Board board, int numMoves, MoveScore moveScore) {
+        /*
         if (side == Piece.Side.WHITE) {
             Transposition transposition = new Transposition(board.copy(), numMoves, moveScore);
             transpositionTable.put(transposition, transposition);
@@ -148,6 +151,7 @@ public class AlphaBetaPruningAI implements Player {
             Transposition transposition = new Transposition(board.copy(), numMoves, moveScore.getReversedMoveScore());
             transpositionTable.put(transposition, transposition);
         }
+        */
     }
 
     private synchronized Move getNextMoveToConsider() {

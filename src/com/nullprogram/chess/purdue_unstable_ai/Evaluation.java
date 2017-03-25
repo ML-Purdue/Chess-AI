@@ -19,10 +19,11 @@ public class Evaluation {
     private double pawnCoeff;
     private double power;
     private double[] param;
+    private double connectedRooks;
 
     public Evaluation(double isolatedPawns, double staleMateL, double staleMateW, double manCoeff, double centerCoeff,
                       double power, double pawnCoeff, double bishVal, double kingVal,
-                      double knightVal, double pawnVal, double queenVal, double rookVal) {
+                      double knightVal, double pawnVal, double queenVal, double rookVal, double connectedRooks) {
 
         values = setUpValues(bishVal, kingVal, knightVal, pawnVal, queenVal, rookVal);
         this.isolatedPawns = isolatedPawns;
@@ -32,6 +33,7 @@ public class Evaluation {
         this.manCoeff = manCoeff;
         this.power = power;
         this.pawnCoeff = pawnCoeff;
+        this.connectedRooks = connectedRooks;
         this.param = new double[]{isolatedPawns, staleMateL, staleMateW, manCoeff, centerCoeff,
         power, pawnCoeff, bishVal, kingVal,
         knightVal, pawnVal, queenVal, rookVal};
@@ -47,11 +49,17 @@ public class Evaluation {
     double evaluateBoard(Board board, Piece.Side side) {
         double myPoints = 0;
         double enemyPoints = 0;
-
+        double runningPoints = 0;
         // TODO: Make different eval function if myPoints and enemyPoints are both below some threshold
+
+        Rook whiteRook = null;
+        Rook blackRook = null;
+        double pawnPoints = 0;
         for (int i = 0; i < board.getWidth(); i++) {
             for (int j = 0; j < board.getHeight(); j++) {
                 Piece p = board.getPiece(new Position(i, j));
+
+                // Piece values
                 if (p != null) {
                     if (p.getSide().equals(side)) {
                         myPoints += getPieceValue(p);
@@ -59,11 +67,118 @@ public class Evaluation {
                         enemyPoints += getPieceValue(p);
                     }
                 }
+
+                // Pawn analysis
+                if (p != null && p.getClass().equals(Pawn.class)) {
+
+                    // Pawn coverage
+                    if (p.getSide() == side) {
+                        if (bottomRight(p, board) == 0 && bottomLeft(p, board) == 0 && topLeft(p, board) == 0 &&
+                                topRight(p, board) == 0) {
+                            runningPoints -= isolatedPawns;
+                        }
+                    }
+                    else {
+                        if (bottomRight(p, board) == 0 && bottomLeft(p, board) == 0 && topLeft(p, board) == 0 &&
+                                topRight(p, board) == 0) {
+                            runningPoints += isolatedPawns;
+                        }
+                    }
+
+                    // Isolated Pawns
+                    if (p.getSide().equals(side)) {
+                        pawnPoints += topLeft(p, board);
+                        pawnPoints += topRight(p, board);
+                    } else {
+                        pawnPoints -= topLeft(p, board);
+                        pawnPoints -= topRight(p, board);
+                    }
+                }
+
+                if (p != null && p.getClass().equals(Rook.class)) {
+                    //ASSUMING (0,0) IS BOTTOM LEFT
+                   if(p.getSide() == Piece.Side.WHITE) {
+                       if(whiteRook == null) {
+                           whiteRook = (Rook)p;
+                       }
+                       else {
+                           boolean isConnected = false;
+                           if(p.getPosition().getX() == whiteRook.getPosition().getX()) {
+                               //same column
+                               isConnected = true;
+                               for (int k = whiteRook.getPosition().getY() + 1; k < p.getPosition().getY(); k++) {
+                                   Piece somePiece = board.getPiece(new Position(p.getPosition().getX(), k));
+                                   if (somePiece != null) {
+                                       isConnected = false;
+                                       break;
+                                   }
+                               }
+                               if (isConnected) {
+                                   runningPoints += connectedRooks;
+                               }
+                           }
+                           else if(p.getPosition().getY() == whiteRook.getPosition().getY()) {
+                                //same row
+                               isConnected = true;
+                               for (int k = whiteRook.getPosition().getX() + 1; k < p.getPosition().getX(); k++) {
+                                   Piece somePiece = board.getPiece(new Position(k, whiteRook.getPosition().getY()));
+                                   if (somePiece != null) {
+                                       isConnected = false;
+                                       break;
+                                   }
+                               }
+                               if (isConnected) {
+                                   //ADD SOME VALUE TO WHITE
+                                   runningPoints += connectedRooks;
+                               }
+                           }
+                       }
+                   }
+                    else {
+                       if(blackRook == null) {
+                           blackRook = (Rook)p;
+                       }
+                       else {
+                           boolean isConnected = false;
+                           if(p.getPosition().getX() == blackRook.getPosition().getX()) {
+                               //same column
+                               isConnected = true;
+                               for (int k = blackRook.getPosition().getY() + 1; k < p.getPosition().getY(); k++) {
+                                   Piece somePiece = board.getPiece(new Position(p.getPosition().getX(), k));
+                                   if (somePiece != null) {
+                                       isConnected = false;
+                                       break;
+                                   }
+                               }
+                               if (isConnected) {
+                                   //ADD SOME VALUE TO BLACK
+                                   runningPoints -= connectedRooks;
+                               }
+                           }
+                           else if(p.getPosition().getY() == blackRook.getPosition().getY()) {
+                               //same row
+                               isConnected = true;
+                               for (int k = blackRook.getPosition().getX() + 1; k < p.getPosition().getX(); k++) {
+                                   Piece somePiece = board.getPiece(new Position(k, blackRook.getPosition().getY()));
+                                   if (somePiece != null) {
+                                       isConnected = false;
+                                       break;
+                                   }
+                               }
+                               if (isConnected) {
+                                   //ADD SOME VALUE TO BLACK
+                                   runningPoints -= connectedRooks;
+                               }
+                           }
+
+                       }
+                    }
+                }
             }
         }
-        double runningPoints = (myPoints - enemyPoints) * 1;
-
-
+        runningPoints += myPoints - enemyPoints;
+        pawnPoints *= pawnCoeff;
+        runningPoints += pawnPoints;
 
         // End of game
         if (runningPoints < 0 && (board.stalemate() || board.threeFold())) {
@@ -83,46 +198,6 @@ public class Evaluation {
         int oppMan = board.allMoves(opp, true).size();
         runningPoints += ((man - oppMan)*manCoeff);
 
-        // Pawn coverage
-        double pawnPoints = 0;
-        for (int i = 0; i < board.getWidth(); i++) {
-            for (int j = 0; j < board.getHeight(); j++) {
-                Piece p = board.getPiece(new Position(i, j));
-                if (p != null && p.getClass().equals(Pawn.class)) {
-                    if (p.getSide().equals(side)) {
-                        pawnPoints += topLeft(p, board);
-                        pawnPoints += topRight(p, board);
-                    } else {
-                        pawnPoints -= topLeft(p, board);
-                        pawnPoints -= topRight(p, board);
-                    }
-                }
-            }
-        }
-        pawnPoints *= pawnCoeff;
-        runningPoints += pawnPoints;
-
-        // Isolated pawns
-        for (int i = 0; i < board.getWidth(); i++) {
-            for (int j = 0; j < board.getHeight(); j++) {
-                Piece p = board.getPiece(new Position(i, j));
-                if (p != null && p.getClass().equals(Pawn.class)) {
-                    if (p.getSide() == side) {
-                        if (bottomRight(p, board) == 0 && bottomLeft(p, board) == 0 && topLeft(p, board) == 0 &&
-                                topRight(p, board) == 0) {
-                            runningPoints -= isolatedPawns;
-                        }
-                    }
-                    else {
-                        if (bottomRight(p, board) == 0 && bottomLeft(p, board) == 0 && topLeft(p, board) == 0 &&
-                                topRight(p, board) == 0) {
-                            runningPoints += isolatedPawns;
-                        }
-                    }
-                }
-            }
-        }
-
         // Center control
         // Note: Value more disposable pieces in the center, as apposed to more valuable ones like a Queen
         for(int i = 3; i <= 4; i++){
@@ -130,7 +205,7 @@ public class Evaluation {
                 Piece p = board.getPiece(new Position(i, j));
                 if (p != null && p.getSide().equals(side)) {
                     runningPoints += centerCoeff/ Math.pow(getPieceValue(p), power);
-                }else if(p!=null && !p.getSide().equals(side)) {
+                } else if(p!=null && !p.getSide().equals(side)) {
                     runningPoints -= centerCoeff / Math.pow(getPieceValue(p), power);
                 }
             }

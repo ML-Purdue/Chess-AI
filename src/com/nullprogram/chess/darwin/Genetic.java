@@ -6,16 +6,8 @@ import com.nullprogram.chess.boards.StandardBoard;
 import com.nullprogram.chess.pieces.*;
 import com.nullprogram.chess.purdue_unstable_ai.AlphaBetaPruningAI;
 import com.nullprogram.chess.purdue_unstable_ai.Evaluation;
-import sun.font.TrueTypeFont;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
-/**
- * Created by matthewpage on 3/4/17.
- */
 public class Genetic {
 
     private static final int SIZE = 20;
@@ -50,8 +42,7 @@ public class Genetic {
                                     Piece currPiece = board.getPiece(new Position(k, w));
                                     if (currPiece.getSide() == Piece.Side.WHITE) {
                                         rpoint += getScore(currPiece);
-                                    }
-                                    else {
+                                    } else {
                                         rpoint -= getScore(currPiece);
                                     }
                                 }
@@ -59,12 +50,10 @@ public class Genetic {
                             if (rpoint > 0.001) {
                                 scoreBoard[i] += 0.75;
                                 scoreBoard[j] += 0.25;
-                            }
-                            else if (rpoint < -0.001){
+                            } else if (rpoint < -0.001) {
                                 scoreBoard[j] += 0.75;
                                 scoreBoard[i] += 0.25;
-                            }
-                            else {
+                            } else {
                                 scoreBoard[i] += 0.5;
                                 scoreBoard[j] += 0.5;
                             }
@@ -72,8 +61,7 @@ public class Genetic {
                         else {
                             if (newgame.getWinner() == Piece.Side.WHITE) {
                                 scoreBoard[i]++;
-                            }
-                            else {
+                            } else {
                                 scoreBoard[j]++;
                             }
                         }
@@ -125,7 +113,8 @@ public class Genetic {
                         my_random(config[9][1], config[9][0]),
                         my_random(config[10][1], config[10][0]),
                         my_random(config[11][1], config[11][0]),
-                        my_random(config[12][1], config[12][0])
+                        my_random(config[12][1], config[12][0]),  5
+
                 );
 
             }
@@ -181,6 +170,6 @@ public class Genetic {
                 Math.random()*20,
                 1,
                 Math.random()*50,
-                Math.random()*30);
+                Math.random()*30, 5);
     }
 }
