@@ -113,7 +113,7 @@ public class Genetic {
                         my_random(config[9][1], config[9][0]),
                         my_random(config[10][1], config[10][0]),
                         my_random(config[11][1], config[11][0]),
-                        my_random(config[12][1], config[12][0]),  5
+                        my_random(config[12][1], config[12][0]),  5, 0.5, 1
 
                 );
 
@@ -170,6 +170,6 @@ public class Genetic {
                 Math.random()*20,
                 1,
                 Math.random()*50,
-                Math.random()*30, 5);
+                Math.random()*30, 5, 0.5, 1);
     }
 }

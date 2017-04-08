@@ -21,9 +21,13 @@ public class Evaluation {
     private double[] param;
     private double connectedRooks;
 
+    private double pawnshield;
+    private double promotion;
+
     public Evaluation(double isolatedPawns, double staleMateL, double staleMateW, double manCoeff, double centerCoeff,
                       double power, double pawnCoeff, double bishVal, double kingVal,
-                      double knightVal, double pawnVal, double queenVal, double rookVal, double connectedRooks) {
+                      double knightVal, double pawnVal, double queenVal, double rookVal, double connectedRooks, double pawnshield,
+                      double promotion) {
 
         values = setUpValues(bishVal, kingVal, knightVal, pawnVal, queenVal, rookVal);
         this.isolatedPawns = isolatedPawns;
@@ -37,6 +41,9 @@ public class Evaluation {
         this.param = new double[]{isolatedPawns, staleMateL, staleMateW, manCoeff, centerCoeff,
         power, pawnCoeff, bishVal, kingVal,
         knightVal, pawnVal, queenVal, rookVal};
+
+        this.pawnshield = pawnshield;
+        this.promotion = promotion;
     }
 
     public double[] getParam() {
@@ -68,6 +75,54 @@ public class Evaluation {
                     }
                 }
 
+                // Pawn Shield
+
+                if (p != null && p.getClass().equals(King.class)) {
+                    if (p.moved()) {
+                        int numPawns = 0;
+                        int numPawnsTwo = 0;
+                        if (p.getSide() == Piece.Side.WHITE && j == 0) {
+                            for (int k = Math.max(i - 1, 0); k < Math.min(i + 2, 8); k++) {
+                                Piece above = board.getPiece(new Position(k, j+1));
+                                Piece twoAbove = board.getPiece(new Position(k, j+2));
+                                if (above instanceof Pawn && above.getSide() == Piece.Side.WHITE) {
+                                    numPawns++;
+                                }
+                                else if (twoAbove instanceof Pawn && twoAbove.getSide() == Piece.Side.WHITE){
+                                    numPawnsTwo++;
+                                }
+                            }
+
+                        }
+                        else if (j == 7) {
+                            for (int k = Math.max(i - 1, 0); k < Math.min(i + 2, 8); k++) {
+                                Piece above = board.getPiece(new Position(k, j-1));
+                                Piece twoAbove = board.getPiece(new Position(k, j-2));
+                                if (above instanceof Pawn && above.getSide() == Piece.Side.BLACK) {
+                                    numPawns++;
+                                }
+                                else if (twoAbove instanceof Pawn && twoAbove.getSide() == Piece.Side.BLACK){
+                                    numPawnsTwo++;
+                                }
+                            }
+                        }
+                        if (i == 0 || i == 7) {
+                            numPawns++;
+                        }
+                        double pawnShieldScore = (2*numPawns + numPawnsTwo)/6.0;
+                        if (pawnShieldScore >= 4.9/6.0) {
+                            pawnShieldScore = 2.0;
+                        }
+
+                        if (side == p.getSide()) {
+                            myPoints += pawnshield * pawnShieldScore;
+                        }
+                        else {
+                            enemyPoints += pawnshield * pawnShieldScore;
+                        }
+                    }
+                }
+
                 // Pawn analysis
                 if (p != null && p.getClass().equals(Pawn.class)) {
 
@@ -87,11 +142,31 @@ public class Evaluation {
 
                     // Isolated Pawns
                     if (p.getSide().equals(side)) {
-                        pawnPoints += topLeft(p, board);
-                        pawnPoints += topRight(p, board);
+                        if (p.getSide() == Piece.Side.WHITE) {
+                            pawnPoints += topLeft(p, board);
+                            pawnPoints += topRight(p, board);
+                        }
+                        else {
+                            pawnPoints += bottomLeft(p, board);
+                            pawnPoints += bottomRight(p, board);
+                        }
                     } else {
-                        pawnPoints -= topLeft(p, board);
-                        pawnPoints -= topRight(p, board);
+                        if (p.getSide() == Piece.Side.WHITE) {
+                            pawnPoints -= topLeft(p, board);
+                            pawnPoints -= topRight(p, board);
+                        }
+                        else {
+                            pawnPoints -= bottomLeft(p, board);
+                            pawnPoints -= bottomRight(p, board);
+                        }
+                    }
+
+                    // Promotion
+                    if (p.getSide() == Piece.Side.BLACK && j <= 3) {
+                        pawnPoints += promotion * Math.pow(2, 3 - j);
+                    }
+                    else if (p.getSide() == Piece.Side.WHITE && j >= 4) {
+                        pawnPoints += promotion * Math.pow(2, j - 4);
                     }
                 }
 
@@ -100,8 +175,7 @@ public class Evaluation {
                    if(p.getSide() == Piece.Side.WHITE) {
                        if(whiteRook == null) {
                            whiteRook = (Rook)p;
-                       }
-                       else {
+                       } else {
                            boolean isConnected = false;
                            if(p.getPosition().getX() == whiteRook.getPosition().getX()) {
                                //same column
