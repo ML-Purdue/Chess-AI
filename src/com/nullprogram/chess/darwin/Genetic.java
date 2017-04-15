@@ -31,7 +31,7 @@ public class Genetic {
                         Player black = new AlphaBetaPruningAI(population[j]);
                         Game newgame = new Game(BoardFactory.create(StandardBoard.class));
                         newgame.seat(white, black);
-                        Thread currThread = newgame.begin();
+                        Thread currThread = newgame.begin(null);
 
                         currThread.join(15*60*1000);
                         if (newgame.getWinner() == null) {
@@ -73,8 +73,8 @@ public class Genetic {
             for (int i = 0; i < SURVIVORS; i++) {
                 survivors[i] = population[i];
             }
-            double[][] config = new double[13][2];
-            for (int i = 0; i < 13; i++) {
+            double[][] config = new double[16][2];
+            for (int i = 0; i < config.length; i++) {
                 config[i][0] = survivors[0].getParam()[i];
                 for (int j = 1; j < SURVIVORS; j++) {
                     if (survivors[j].getParam()[i] > config[i][0]) {
@@ -113,7 +113,10 @@ public class Genetic {
                         my_random(config[9][1], config[9][0]),
                         my_random(config[10][1], config[10][0]),
                         my_random(config[11][1], config[11][0]),
-                        my_random(config[12][1], config[12][0]),  5, 0.5, 1
+                        my_random(config[12][1], config[12][0]),
+                        my_random(config[13][1], config[13][0]),
+                        my_random(config[14][1], config[14][0]),
+                        my_random(config[15][1], config[15][0])
 
                 );
 
@@ -170,6 +173,9 @@ public class Genetic {
                 Math.random()*20,
                 1,
                 Math.random()*50,
-                Math.random()*30, 5, 0.5, 1);
+                Math.random()*30,
+                Math.random()*5,
+                Math.random()*3,
+                Math.random()*2);
     }
 }

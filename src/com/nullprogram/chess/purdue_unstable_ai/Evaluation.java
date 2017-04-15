@@ -1,8 +1,6 @@
 package com.nullprogram.chess.purdue_unstable_ai;
 
-import com.nullprogram.chess.Board;
-import com.nullprogram.chess.Piece;
-import com.nullprogram.chess.Position;
+import com.nullprogram.chess.*;
 import com.nullprogram.chess.pieces.*;
 
 import java.util.HashMap;
@@ -66,18 +64,26 @@ public class Evaluation {
             for (int j = 0; j < board.getHeight(); j++) {
                 Piece p = board.getPiece(new Position(i, j));
 
+                if (p == null) {
+                    continue;
+                }
+
                 // Piece values
-                if (p != null) {
-                    if (p.getSide().equals(side)) {
-                        myPoints += getPieceValue(p);
-                    } else {
-                        enemyPoints += getPieceValue(p);
-                    }
+                if (p.getSide().equals(side)) {
+                    myPoints += getPieceValue(p);
+                } else {
+                    enemyPoints += getPieceValue(p);
+                }
+
+                // Manuverability
+                if (p.getSide() == side) {
+                    runningPoints += manCoeff * getPieceValue(p) * Math.sqrt(p.getMoves(true).size());
+                } else {
+                    runningPoints -= manCoeff * getPieceValue(p) * Math.sqrt(p.getMoves(true).size());
                 }
 
                 // Pawn Shield
-
-                if (p != null && p.getClass().equals(King.class)) {
+                if (p.getClass().equals(King.class)) {
                     if (p.moved()) {
                         int numPawns = 0;
                         int numPawnsTwo = 0;
@@ -267,10 +273,11 @@ public class Evaluation {
         }
 
         // Maneuverability
-        int man = board.allMoves(side, true).size();
-        Piece.Side opp = (side == Piece.Side.BLACK)? Piece.Side.WHITE:Piece.Side.BLACK;
-        int oppMan = board.allMoves(opp, true).size();
-        runningPoints += ((man - oppMan)*manCoeff);
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+
+            }
+        }
 
         // Center control
         // Note: Value more disposable pieces in the center, as apposed to more valuable ones like a Queen
@@ -278,9 +285,9 @@ public class Evaluation {
             for(int j = 3; j <= 4; j++){
                 Piece p = board.getPiece(new Position(i, j));
                 if (p != null && p.getSide().equals(side)) {
-                    runningPoints += centerCoeff/ Math.pow(getPieceValue(p), power);
+                    runningPoints += centerCoeff * Math.pow(getPieceValue(p), power);
                 } else if(p!=null && !p.getSide().equals(side)) {
-                    runningPoints -= centerCoeff / Math.pow(getPieceValue(p), power);
+                    runningPoints -= centerCoeff * Math.pow(getPieceValue(p), power);
                 }
             }
         }

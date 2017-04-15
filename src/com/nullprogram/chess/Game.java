@@ -1,5 +1,6 @@
 package com.nullprogram.chess;
 
+import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.logging.Logger;
@@ -57,6 +58,8 @@ public class Game implements Runnable {
     
     private int turnNumber;
 
+    private PrintWriter out;
+
     /** List of event listeners. */
     private final Collection<GameListener> listeners =
         new CopyOnWriteArraySet<GameListener>();
@@ -101,7 +104,9 @@ public class Game implements Runnable {
     /**
      * Begin the game.
      */
-    public final Thread begin() {
+    public final Thread begin(PrintWriter out) {
+        this.out = out;
+
         Thread newThread = new Thread(this);
         done = false;
         turn = Piece.Side.BLACK;
@@ -129,6 +134,9 @@ public class Game implements Runnable {
             /* Fetch the move from the player. */
             Move move = player.takeTurn(getBoard(), turn);
             board.move(move);
+            if (out != null) {
+                out.write(move.toString());
+            }
             setProgress(0);
             if (done) {
                 /* Game may have ended abruptly during the player's

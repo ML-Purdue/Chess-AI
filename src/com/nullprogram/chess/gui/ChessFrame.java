@@ -7,6 +7,7 @@ import com.nullprogram.chess.GameEvent;
 import com.nullprogram.chess.GameListener;
 import com.nullprogram.chess.Player;
 import com.nullprogram.chess.boards.EmptyBoard;
+import com.nullprogram.chess.networking.Constants;
 import com.nullprogram.chess.pieces.ImageServer;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -14,6 +15,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -43,6 +47,12 @@ public class ChessFrame extends JFrame implements ComponentListener,
 	 * Create a new ChessFrame for the given board.
 	 */
 	public ChessFrame() {
+		display = null;
+		progress = null;
+		new ChessFrame(false);
+	}
+
+	public ChessFrame(boolean isClient) {
 		super(Chess.getTitle());
 		setResizable(true);
 		setLocationRelativeTo(null);
@@ -62,13 +72,13 @@ public class ChessFrame extends JFrame implements ComponentListener,
 		addComponentListener(this);
 		setLocationRelativeTo(null);
 		setVisible(true);
-		newGame();
+		newGame(isClient);
 	}
 
 	/**
 	 * Set up a new game.
 	 */
-	public final void newGame() {
+	public final void newGame(boolean isClient) {
 		NewGame ngFrame = new NewGame(this);
 		ngFrame.setVisible(true);
 		Game newGame = ngFrame.getGame();
@@ -87,7 +97,19 @@ public class ChessFrame extends JFrame implements ComponentListener,
 		progress.setGame(game);
 		game.addGameListener(this);
 		game.addGameListener(display);
-		game.begin();
+
+		if (isClient) {
+			// Socket I/O
+			try {
+				Socket socket = new Socket(Constants.host, Constants.port);
+				game.begin(new PrintWriter(socket.getOutputStream()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			game.begin(null);
+		}
+
 	}
 
 	/**
@@ -123,7 +145,7 @@ public class ChessFrame extends JFrame implements ComponentListener,
 		@Override
 		public final void actionPerformed(final ActionEvent e) {
 			if ("New Game".equals(e.getActionCommand())) {
-				frame.newGame();
+				frame.newGame(false);
 			} else if ("Exit".equals(e.getActionCommand())) {
 				System.exit(0);
 			}

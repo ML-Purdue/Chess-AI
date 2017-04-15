@@ -114,8 +114,25 @@ public class NewGame extends JDialog implements ActionListener {
 		} else if ("p-abp".equals(name)) {
 			return new AlphaBetaPruningAI(game);
 		} else if ("p-tt".equals(name)){
-			return new com.nullprogram.chess.purdue_unstable_ai.AlphaBetaPruningAI(new Evaluation(0.5,
-					2, 1, 0.25, 0.25, -0.5, 0.05, 3, 1000, 3, 1, 9, 5, 1, 0.5, 1));
+			float pieceCoef = 3;
+			return new com.nullprogram.chess.purdue_unstable_ai.AlphaBetaPruningAI(new Evaluation(
+					0.3, // pawn connectivity
+					2, // stalemate losing advantage
+					1,  // stalemate winning penalty
+					0.075, // maneuverability
+					0.25, // Center control
+					0.5, // Center control power
+					0.05, // Isolated pawns + promotion
+					3 * pieceCoef, // bishop
+					1000 * pieceCoef, // king
+					3 * pieceCoef, // knight
+					1 * pieceCoef, // pawn
+					9 * pieceCoef, // queen
+					5 * pieceCoef,  // rook
+					0.25, // connected rook
+					0.3, // pawn shield
+					1 // pawn promotion
+			));
 		} else {
 			return new Minimax(game, name);
 		}

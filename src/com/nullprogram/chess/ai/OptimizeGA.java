@@ -143,7 +143,7 @@ public class OptimizeGA implements GameListener {
         Player black = new Minimax(game, blackConf.getProperties());
         game.seat(white, black);
         game.addGameListener(this);
-        game.begin();
+        game.begin(null);
     }
 
     @Override
